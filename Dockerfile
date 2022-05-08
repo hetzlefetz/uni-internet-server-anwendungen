@@ -3,5 +3,4 @@ WORKDIR /var/www/html
 
 COPY src/esa1/* ./
 
-
 EXPOSE 80
