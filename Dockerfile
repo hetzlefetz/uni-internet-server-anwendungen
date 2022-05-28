@@ -1,7 +1,7 @@
 FROM php:8.0-apache
 WORKDIR /var/www/html
 
-COPY src/esa1/* ./
+COPY src/esa2/* ./
 
 
 EXPOSE 80
