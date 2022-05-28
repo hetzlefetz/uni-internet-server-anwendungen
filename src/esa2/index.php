@@ -99,58 +99,115 @@ function handleStartPageInput()
     displayShipping(null);
 }
 
+/**
+ * exists: check if a variable is existing and stringish
+ *
+ * @param  mixed $var the variable to check
+ * @return bool true if the variable isset() and would cast to an string of length >0
+ */
+function exists($var): bool
+{
+    return isset($var) && strlen(trim($var)) > 0;
+}
+
+/**
+ * validate : performs validation
+ *
+ * @param  mixed $val the value to validate
+ * @param  callable[] $validators Validation function that return true if passed false if not
+ * @param  string[] $errors : adds the n-th entry of this array if the n-th validator fails
+ * @return iterable : an array of strings for every failed validator, empty array if nothing failed
+ */
+function validate($val, $validators, $errors): iterable
+{
+    //We need an error for each validator
+    if (count($validators) != count($errors)) {
+        throw new Exception("Need an Error for each validator");
+    }
+    $ret = [];
+    $i = 0;
+    //Iterate over validators
+    foreach ($validators as $validator) {
+
+        if (!$validator($val)) {
+            //return as soon as the first fails
+            array_push($ret, $errors[$i]);
+        }
+        $i++;
+    }
+    //All passed-> return true
+    return $ret;
+}
+/**
+ * hasErrors
+ *
+ * @param  mixed $errors an associative array of arrays 
+ * @return bool true if any error object
+ */
+function hasErrors($errors): bool
+{
+    foreach ($errors as $key => $value) {
+        if (count($errors[$key])) {
+            return true;
+        }
+    }
+    return false;
+}
 function handleShippingPageInput()
 {
-    console_log("handleShippingPageInput");
-    $setCount = 0;
+    //Save functions in variables ... php meh
+    $valSpecial = 'validateSpecialChars';
+    $valFnLn = 'validateFnLn';
+    $valTel = 'validateTel';
+    $valLoc = 'validatePlzOrt';
+    $valNonEmpty = "exists";
+
+
     $errors = [];
-    for ($i = 1; $i <= 3; $i++) {
-        if (isset($_POST["s" . $i]) && strlen(trim($_POST["s" . $i])) > 0) {
-            $setCount++;
-            if (!validateSpecialChars($_POST["s" . $i])) {
-                $errors["s" . $i] = "Sonderzeichen sind nicht erlaubt";
-            }
-        }
-    }
-    if (isset($_POST["s1"])) {
-        if (!validateFnLn($_POST["s1"])) {
-            if (isset($errors["s1"])) {
-                $errors["s1"] .= "<br /> , Bitte Vor UND Nachnamen eingeben";
-            } else {
-                $errors["s1"] = "Bitte Vor UND Nachnamen eingeben";
-            }
-        }
-    }
-    if (isset($_POST["s2"])) {
-        if (!validatePlzOrt($_POST["s2"])) {
-            if (isset($errors["s2"])) {
-                $errors["s2"] .= "<br /> , Bitte PLZ UND Ort eingeben";
-            } else {
-                $errors["s2"] = "Bitte PLZ UND Ort eingeben";
-            }
-        }
-    }
 
-    if (isset($_POST["s3"])) {
-        if (!validateTel($_POST["s3"])) {
-            if (isset($errors["s3"])) {
-                $errors["s3"] .= "<br /> , Bitte eine gültige Telefonnummer eingeben";
-            } else {
-                $errors["s3"] = "Bitte eine gültige Telefonnummer eingeben";
-            }
-        }
-    }
+    //validate values from POST
+    $errors["s1"] = validate(
+        $_POST["s1"],
+        array($valNonEmpty, $valSpecial, $valFnLn),
+        array(
+            "Der wert darf nicht leer sein",
+            "Sonderzeichen sind nicht erlaubt",
+            "Bitte Vor UND Nachnamen eingeben"
+        )
+    );
 
-    if ($setCount == 3 && count($errors) == 0) {
-        console_log("overview");
+    $errors["s2"] = validate(
+        $_POST["s2"],
+        array($valNonEmpty, $valSpecial, $valLoc),
+        array(
+            "Der wert darf nicht leer sein",
+            "Sonderzeichen sind nicht erlaubt",
+            "Bitte PLZ und Ort eingeben"
+        )
+    );
+
+    $errors["s3"] = validate(
+        $_POST["s3"],
+        array($valNonEmpty, $valSpecial, $valTel),
+        array(
+            "Der wert darf nicht leer sein",
+            "Sonderzeichen sind nicht erlaubt",
+            "Bitte Telefonnummer eingeben"
+        )
+    );
+
+    //go back to shipping if has errors
+    if (hasErrors($errors)) {
+        displayShipping($errors);
+    } else {
+        //Save shipping info to session
         $_SESSION["s1"] = $_POST["s1"];
         $_SESSION["s2"] = $_POST["s2"];
         $_SESSION["s3"] = $_POST["s3"];
         $_SESSION["page_id"] = "p2";
+
+        //go to overview
         displayOverview();
-    } else {
-        console_log("shipping with errors");
-        displayShipping($errors);
     }
 }
 function displayStartPage($errors)
@@ -179,9 +236,9 @@ function displayShipping($errors)
     $output .= makeList($wishes);
     $output .= makeHeader("Deine Lieferadresse:");
 
-    $output .= makeInput("s1", "Vor und Nachname:", false, isset($errors["s1"]) ? $errors["s1"] : null);
-    $output .= makeInput("s2", "PLZ und Ort:", false, isset($errors["s2"]) ? $errors["s2"] : null);
-    $output .= makeInput("s3", "Telefonnummer:", false, isset($errors["s3"]) ? $errors["s3"] : null);
+    $output .= makeInput("s1", "Vor und Nachname:", false, isset($errors["s1"]) && count($errors["s1"]) > 0 ? implode(",", $errors["s1"]) : null);
+    $output .= makeInput("s2", "PLZ und Ort:", false, isset($errors["s2"]) && count($errors["s2"]) > 0 ? implode(",", $errors["s2"]) : null);
+    $output .= makeInput("s3", "Telefonnummer:", false, isset($errors["s3"]) && count($errors["s3"]) > 0 ? implode(",", $errors["s3"]) : null);
 
     htmlWrapper(makeForm($output));
 }
