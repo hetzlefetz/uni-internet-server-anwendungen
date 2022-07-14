@@ -1,0 +1,18 @@
+{
+  "name": "knechtrootrecht/edu-adventure",
+  "description": "an educational adventure game plattform",
+  "type": "project",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "EduAdventure\\": "src/",
+      "EduAdventure\\Db\\": "src/db/",
+      "EduAdventure\\Api\\": "src/api/",
+      "EduAdventure\\Utils\\": "src/utils/",
+      "EduAdventure\\Models\\": "src/models/",
+      "EduAdventure\\Views\\": "src/views/"
+    }
+  },
+  "minimum-stability": "dev",
+  "require": {}
+}
