@@ -47,10 +47,14 @@ class ComposerStaticInitc0c13f691ef84a96690a8b800772d8ef
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'EduAdventure\\Api\\ApiAuth' => __DIR__ . '/../..' . '/src/api/ApiAuth.php',
+        'EduAdventure\\Api\\ApiGame' => __DIR__ . '/../..' . '/src/api/ApiGame.php',
         'EduAdventure\\Api\\ApiRegister' => __DIR__ . '/../..' . '/src/api/ApiRegister.php',
         'EduAdventure\\Config' => __DIR__ . '/../..' . '/src/Config.php',
         'EduAdventure\\Db\\DbWrapper' => __DIR__ . '/../..' . '/src/db/DbWrapper.php',
         'EduAdventure\\Db\\SQLiteConnection' => __DIR__ . '/../..' . '/src/db/SQLiteConnection.php',
+        'EduAdventure\\Models\\Game' => __DIR__ . '/../..' . '/src/models/Game.php',
+        'EduAdventure\\Models\\Session' => __DIR__ . '/../..' . '/src/models/Session.php',
         'EduAdventure\\Models\\User' => __DIR__ . '/../..' . '/src/models/User.php',
         'EduAdventure\\Utils\\HtmlHelper' => __DIR__ . '/../..' . '/src/utils/HtmlHelper.php',
         'EduAdventure\\Utils\\Utils' => __DIR__ . '/../..' . '/src/utils/Utils.php',

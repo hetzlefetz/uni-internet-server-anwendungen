@@ -7,10 +7,14 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'EduAdventure\\Api\\ApiAuth' => $baseDir . '/src/api/ApiAuth.php',
+    'EduAdventure\\Api\\ApiGame' => $baseDir . '/src/api/ApiGame.php',
     'EduAdventure\\Api\\ApiRegister' => $baseDir . '/src/api/ApiRegister.php',
     'EduAdventure\\Config' => $baseDir . '/src/Config.php',
     'EduAdventure\\Db\\DbWrapper' => $baseDir . '/src/db/DbWrapper.php',
     'EduAdventure\\Db\\SQLiteConnection' => $baseDir . '/src/db/SQLiteConnection.php',
+    'EduAdventure\\Models\\Game' => $baseDir . '/src/models/Game.php',
+    'EduAdventure\\Models\\Session' => $baseDir . '/src/models/Session.php',
     'EduAdventure\\Models\\User' => $baseDir . '/src/models/User.php',
     'EduAdventure\\Utils\\HtmlHelper' => $baseDir . '/src/utils/HtmlHelper.php',
     'EduAdventure\\Utils\\Utils' => $baseDir . '/src/utils/Utils.php',

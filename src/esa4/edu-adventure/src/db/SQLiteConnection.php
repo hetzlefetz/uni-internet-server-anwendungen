@@ -23,7 +23,6 @@ class SQLiteConnection
      */
     public function connect()
     {
-        echo Config::PATH_TO_SQLITE_FILE;
         if ($this->pdo == null) {
             $this->pdo = new \PDO("sqlite:" . Config::PATH_TO_SQLITE_FILE);
         }

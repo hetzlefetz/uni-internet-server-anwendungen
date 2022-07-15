@@ -60,4 +60,25 @@ class Utils
         }
         http_response_code(400);
     }
+
+    static function redirect(string $url, int $status = 200, array $errors = [])
+    {
+
+        if (count($errors) > 0) {
+            array_map(fn ($error) => Utils::addErrorToSession($error), $errors);
+        }
+        http_response_code($status);
+        header("Location:" . $url);
+        error_log("New location: $url");
+        exit();
+        return;
+    }
+
+    static function addErrorToSession(string $error)
+    {
+        if (!array_key_exists("ERRORS", $_SESSION)) {
+            $_SESSION["ERRORS"] = [];
+        }
+        array_push($_SESSION["ERRORS"], $error);
+    }
 }

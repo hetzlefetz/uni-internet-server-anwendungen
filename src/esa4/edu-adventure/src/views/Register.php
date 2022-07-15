@@ -3,12 +3,21 @@
 namespace EduAdventure\Views;
 
 use EduAdventure\Utils\HtmlHelper;
+use EduAdventure\Utils\Utils;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 class Register
 {
     static function getPage()
     {
+        $err = "";
+        if (array_key_exists("ERRORS", $_SESSION) &&  count($_SESSION["ERRORS"]) > 0) {
+            error_log("Have errors");
+            $err .=  HtmlHelper::makeList(...array_map(fn ($error) => HtmlHelper::makeError($error), $_SESSION["ERRORS"]));
+
+            unset($_SESSION["ERRORS"]);
+        }
+
         $additionalHead = '<style>        
         .form-control {
             font-size: 15px;
@@ -98,8 +107,9 @@ class Register
 
         $content = '<div class="signup-form"><form action="/api/register" method="post">
 		<h2>Nutzerregistrierung</h2>
-		<p>Bitte fülle diese form aus um dich zu Registrieren!</p>
-		<hr>
+		<p>Bitte fülle diese Form aus um dich zu Registrieren!</p>
+		<hr>' . $err . '
+        
         <div class="form-group">
 			<div class="input-group">
 				<div class="input-group-prepend">
@@ -147,8 +157,10 @@ class Register
 		<div class="form-group">
             <button type="submit" class="btn btn-primary btn-lg">Sign Up</button>
         </div>
+        <input type="hidden" name="method"  value="register">
     </form>
     </div>';
+
         echo HtmlHelper::MakePage($content, " ", " ", $additionalHead); //No 
     }
 }

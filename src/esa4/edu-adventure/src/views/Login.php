@@ -7,10 +7,10 @@ use EduAdventure\Utils\HtmlHelper;
 require_once __DIR__ . '/../../vendor/autoload.php';
 class Login
 {
-    static function getPage()
-    {
+  static function getPage()
+  {
 
-        $additionalHead = '<style>
+    $additionalHead = '<style>
         .form-signin {
             width: 100%;
             max-width: 330px;
@@ -39,16 +39,16 @@ class Login
           }
         </style>';
 
-        $content = '<div class="form-signin">
-        <form  method="post" action="/api/login">        
+    $content = '<div class="form-signin">
+        <form  method="post" action="/api/auth">        
         <h1 class="h3 mb-3 fw-normal">Bitte anmelden</h1>
     
         <div class="form-floating">
-          <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+          <input name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
           <label for="floatingInput">Email Adresse</label>
         </div>
         <div class="form-floating">
-          <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+          <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
           <label for="floatingPassword">Passwort</label>
         </div>
     
@@ -57,9 +57,10 @@ class Login
             <input type="checkbox" value="remember-me"> Remember me
           </label>
         </div>
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Einloggen</button>        
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Einloggen</button>
+        <input type="hidden" name="method" value="login">        
       </form>
       <a href="/register">Registrieren</a></div>';
-        echo HtmlHelper::MakePage($content, " ", " ", $additionalHead); //No header, No footer
-    }
+    echo HtmlHelper::MakePage($content, " ", " ", $additionalHead); //No header, No footer
+  }
 }
